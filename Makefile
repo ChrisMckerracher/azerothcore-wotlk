@@ -19,13 +19,13 @@ install:
 	cp -r $(BASE_FOLDER)/modules/mod-individual-progression/data/sql/world/base/* $(BASE_FOLDER)/data/sql/custom/db_world/
 
 	# but gate our rules about handling playerbots sql files
+	# ToDo: I will need to wrap the appropriate Dockerfile to run a custom install script before calling the worldserver executable
+	# ToDo: I may be able to base it on: https://github.com/coc0nut/AzerothCore-with-Playerbots-Docker-Setup/blob/main/setup.sh
 	cp -r third-party/* $(BASE_FOLDER)/modules
 	@if [ "$(MY_ENV_VAR)" = "playerbots" ]; then \
-		cp -r $(BASE_FOLDER)/modules/mod-playerbots/data/sql/characters/base/* $(BASE_FOLDER)/data/sql/custom/db_characters \
-		cp -r $(BASE_FOLDER)/modules/mod-playerbots/data/sql/world/base/* $(BASE_FOLDER)/data/sql/custom/db_world \
-		cp -r $(BASE_FOLDER)/modules/mod-playerbots/data/sql/world/updates/* $(BASE_FOLDER)/data/sql/custom/db_world \
-		# ToDo: I will need to wrap the appropriate Dockerfile to run a custom install script before calling the worldserver executable
-		# ToDo: I may be able to base it on: https://github.com/coc0nut/AzerothCore-with-Playerbots-Docker-Setup/blob/main/setup.sh
+		cp -r $(BASE_FOLDER)/modules/mod-playerbots/data/sql/characters/base/* $(BASE_FOLDER)/data/sql/custom/db_characters; \
+		cp -r $(BASE_FOLDER)/modules/mod-playerbots/data/sql/world/base/* $(BASE_FOLDER)/data/sql/custom/db_world; \
+		cp -r $(BASE_FOLDER)/modules/mod-playerbots/data/sql/world/updates/* $(BASE_FOLDER)/data/sql/custom/db_world; \
 		cp -r $(BASE_FOLDER)/modules/mod-playerbots/data/sql/playerbots $(BASE_FOLDER)/data/sql/custom/db_playerbots; \
 	fi
 
