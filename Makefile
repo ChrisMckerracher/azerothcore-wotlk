@@ -3,15 +3,25 @@ export BASE_FOLDER=playerbots
 install:
 	# clean the modules folder
 	cd $(BASE_FOLDER) && git checkout HEAD -- modules
+	cd $(BASE_FOLDER) && git checkout HEAD -- data
 
 	# copy third party modules
 	cp -r third-party/* $(BASE_FOLDER)/modules
+
+	# for some reason, sql stuff isnt working properly, manual override
+	# ToDo: Generalize this
+	#cp -r $(BASE_FOLDER)/modules/mod-individual-progression
+	# ToDo: I think these folders need to be renamed to db-*
+	# fucking this is bullshit
+	#find $(BASE_FOLDER)/modules -type f -path '*/data/sql/updates/db_*/*.sql' -exec cp -v {} $(BASE_FOLDER)/data/sql/custom/test \;
+	cp -r $(BASE_FOLDER)/modules/mod-individual-progression/data/sql/world/base/* $(BASE_FOLDER)/data/sql/custom/db_world/
 
 	# copy first party modules
 	# copy scripts
 
 	# run
-	docker compose -f $(BASE_FOLDER)/docker-compose.yml up
+	docker compose -f $(BASE_FOLDER)/docker-compose.yml build --no-cache && docker compose -f $(BASE_FOLDER)/docker-compose.yml  up
+	#docker compose -f $(BASE_FOLDER)/docker-compose.yml up
 
 .PHONY: install-nobots
 install-nobots: BASE_FOLDER=default
