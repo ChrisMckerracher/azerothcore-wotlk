@@ -17,8 +17,6 @@ install:
 install-nobots: BASE_FOLDER=default
 install-nobots: install
 
-
-
 # Navigate to your AzerothCore modules directory
  #cd <azerothcore-path>/modules
  #
@@ -33,3 +31,8 @@ install-nobots: install
  #
  ## Rebuild your AzerothCore server
  #make -j$(nproc)
+
+# ToDo: make this better structured, in the Dockerfile
+#the git config line gets commented out, and the cmake line loses and and
+    ##git config --global --add safe.directory /azerothcore && \
+    #cmake /azerothcore \
