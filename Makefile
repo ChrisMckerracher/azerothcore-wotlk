@@ -1,22 +1,29 @@
 export BASE_FOLDER=playerbots
 .PHONY: install
-install:
+install: install-modules install-scripts
 	# clean the modules folder
-	cd $(BASE_FOLDER) && git checkout HEAD -- modules
 	cd $(BASE_FOLDER) && git checkout HEAD -- data
 	rm -rf $(BASE_FOLDER)/lua_scripts || true
+	# run
+	docker compose -f $(BASE_FOLDER)/docker-compose.yml build --no-cache && docker compose -f $(BASE_FOLDER)/docker-compose.yml  up
+	#docker compose -f $(BASE_FOLDER)/docker-compose.yml up
+
+.PHONY: install-nobots
+install-nobots: BASE_FOLDER=default
+install-nobots: install
+
+.PHONY: install-modules
+install-modules:
+	rm -r $(BASE_FOLDER)/modules/*
+	cd $(BASE_FOLDER) && git checkout HEAD -- modules
+	# docker setup is weird, so put sql files in a weird place
+	#cp -r $(BASE_FOLDER)/modules/mod-individual-progression/data/sql/world/base/* $(BASE_FOLDER)/data/sql/custom/db_world/
 
 	# copy third party modules
 	cp -r third-party/* $(BASE_FOLDER)/modules
 	@if [ "$(MY_ENV_VAR)" != "playerbots" ]; then \
-		rm -r $(BASE_FOLDER)/modules/mod-playerbots; \
+		rm -r $(BASE_FOLDER)/modules/mod-playerbots || true; \
 	fi
-
-	# copy my first party scripts :)
-	cp -r scripts $(BASE_FOLDER)/lua_scripts
-
-	# docker setup is weird, so put sql files in a weird place
-	cp -r $(BASE_FOLDER)/modules/mod-individual-progression/data/sql/world/base/* $(BASE_FOLDER)/data/sql/custom/db_world/
 
 	# but gate our rules about handling playerbots sql files
 	# ToDo: I will need to wrap the appropriate Dockerfile to run a custom install script before calling the worldserver executable
@@ -29,17 +36,15 @@ install:
 		cp -r $(BASE_FOLDER)/modules/mod-playerbots/data/sql/playerbots $(BASE_FOLDER)/data/sql/custom/db_playerbots; \
 	fi
 
+.PHONY: install-scripts
+install-scripts:
 	# copy first party modules
 	# copy scripts
+	# im sure theres some bullshit find thing but we'll copy scripts to two places and all it a day
+	cp -r scripts $(BASE_FOLDER)/lua_scripts
+	find $(BASE_FOLDER)/lua_scripts -type f ! -name "*.lua" -delete
 
-	# run
-	#docker compose -f $(BASE_FOLDER)/docker-compose.yml build --no-cache && docker compose -f $(BASE_FOLDER)/docker-compose.yml  up
-	docker compose -f $(BASE_FOLDER)/docker-compose.yml up
-
-.PHONY: install-nobots
-install-nobots: BASE_FOLDER=default
-install-nobots: install
-
+	cp -r scripts/*/sql/* $(BASE_FOLDER)/data/sql/custom
 # Navigate to your AzerothCore modules directory
  #cd <azerothcore-path>/modules
  #
