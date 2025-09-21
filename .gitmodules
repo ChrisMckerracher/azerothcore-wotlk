@@ -8,3 +8,9 @@
 	path = playerbots
 	url = https://github.com/liyunfan1223/azerothcore-wotlk.git
 	branch = Playerbot
+[submodule "third-party/mod-eluna"]
+	path = third-party/mod-eluna
+	url = https://github.com/azerothcore/mod-eluna
+[submodule "third-party/mod-playerbots"]
+	path = third-party/mod-playerbots
+	url = https://github.com/liyunfan1223/mod-playerbots.git
