@@ -16,3 +16,20 @@ install:
 .PHONY: install-nobots
 install-nobots: BASE_FOLDER=default
 install-nobots: install
+
+
+
+# Navigate to your AzerothCore modules directory
+ #cd <azerothcore-path>/modules
+ #
+ ## Clone the mod-eluna repository
+ #git clone https://github.com/azerothcore/mod-eluna.git
+ #
+ ## Configure build with your preferred Lua version
+ #cd <azerothcore-build-directory>
+ #cmake ../ -DLUA_VERSION=luajit  # Options: luajit, lua52, lua53, lua54
+ #
+ ## Default: If no version is specified, Lua 5.2 will be used
+ #
+ ## Rebuild your AzerothCore server
+ #make -j$(nproc)
