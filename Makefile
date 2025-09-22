@@ -3,10 +3,9 @@ export BASE_FOLDER=playerbots
 install: install-modules install-scripts
 	# clean the modules folder
 	cd $(BASE_FOLDER) && git checkout HEAD -- data
-	rm -rf $(BASE_FOLDER)/lua_scripts || true
 	# run
-	docker compose -f $(BASE_FOLDER)/docker-compose.yml build --no-cache && docker compose -f $(BASE_FOLDER)/docker-compose.yml  up
-	#docker compose -f $(BASE_FOLDER)/docker-compose.yml up
+	#docker compose -f $(BASE_FOLDER)/docker-compose.yml build --no-cache && docker compose -f $(BASE_FOLDER)/docker-compose.yml  up
+	docker compose -f $(BASE_FOLDER)/docker-compose.yml up
 
 .PHONY: install-nobots
 install-nobots: BASE_FOLDER=default
@@ -38,8 +37,8 @@ install-modules:
 
 .PHONY: install-scripts
 install-scripts:
-	# copy first party modules
-	# copy scripts
+	rm -rf $(BASE_FOLDER)/lua_scripts || true
+
 	# im sure theres some bullshit find thing but we'll copy scripts to two places and all it a day
 	cp -r scripts $(BASE_FOLDER)/lua_scripts
 	find $(BASE_FOLDER)/lua_scripts -type f ! -name "*.lua" -delete

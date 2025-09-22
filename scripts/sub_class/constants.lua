@@ -1,0 +1,1 @@
+SUBCLASS_COMMAND = "subclass"
