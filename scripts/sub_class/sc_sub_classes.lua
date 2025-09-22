@@ -15,8 +15,8 @@ function SubClass:new(name, spell_level_ranges, mandatory_items)
     local instance = {}
     setmetatable(instance, SubClass)
     instance.name = name
-    instance.class = spell_level_ranges
-    instance.spell_id = mandatory_items
+    instance.spell_level_ranges = spell_level_ranges
+    instance.mandatory_items = mandatory_items
     return instance
 end
 
@@ -49,6 +49,7 @@ function SubClass:GetSpells(max_level)
             spells = append(spells, v)
         end
     end
+    return spells
 end
 
 SUBCLASS_MAGE = SubClass:new(CLASS_MAGE, {
@@ -58,3 +59,7 @@ SUBCLASS_MAGE = SubClass:new(CLASS_MAGE, {
         polymorph_r1
     })
 })
+
+SUBCLASSES = {
+    [CLASS_MAGE] = SUBCLASS_MAGE
+}
