@@ -37,10 +37,7 @@ function SubClass:Deregister(player)
     for _, v in ipairs(spells_to_register) do
         -- Some subclasses may be amalgamations of other classes, we don't want to remove an overlapped spell with the actual players mainclass spell
         if v.class ~= player_class then
-            player:SendBroadcastMessage(string.format("You are losing spell %s"), v.name)
             player:RemoveSpell(v.spell_id)
-        else
-            player:SendBroadcastMessage(string.format("You are keeping spell %s"), v.name)
         end
     end
 end
@@ -48,8 +45,7 @@ end
 function SubClass:GetSpells(max_level)
     spells = {}
     for k, v in ipairs(self.spell_level_ranges) do
-        -- ToDo: k wasn't working weirdly enough
-        if v.level <= max_level then
+        if k <= max_level then
             spells = append(spells, v.spells)
         end
     end
@@ -74,5 +70,5 @@ SUBCLASS_Test = SubClass:new("Test", {
 
 SUBCLASSES = {
     [CLASS_MAGE] = SUBCLASS_MAGE,
-    ["TEST"] = SUBCLASS_Test
+    ["Test"] = SUBCLASS_Test
 }

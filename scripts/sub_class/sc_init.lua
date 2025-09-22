@@ -11,8 +11,14 @@ local function GenerateInsertStatement(player_name)
 end
 
 local function OnLogin(event, player)
-    CharDBExecute(GenerateInsertStatement(player:GetName()))
+    local player_name = player:GetName()
+    CharDBExecute(GenerateInsertStatement(player_name))
     local msg = string.format("Sub Class Module loaded! Select a subclass with .%s <class-name>", SUBCLASS_COMMAND)
+    -- Note: This is tmp to get around the class that Azerothcore deallocates spells
+    local current_subclass = SUBCLASSES[GetSubclass(player_name)]
+    if current_subclass ~= nil then
+        current_subclass:Register(player)
+    end
     player:SendBroadcastMessage(msg)
 end
 

@@ -10,12 +10,12 @@ local function UpdateSubclass(player_name, sub_class)
     ))
 end
 
-local function GetSubclass(player_name)
+function GetSubclass(player_name)
     local subclass_result = CharDBQuery(string.format(
         [[
         SELECT SubClass from
             player_sub_class
-        WHERE id =' %s'
+        WHERE id ='%s'
         ]], sanitize_sql_string(player_name)
     ))
 
