@@ -5,7 +5,7 @@ function append(t1, t2)
         new_array[i] = t1[i]
     end
     for i = 1, #t2 do
-        new_array[#t1+1] = t2[i]
+        new_array[#t1+i] = t2[i]
     end
 
     return new_array

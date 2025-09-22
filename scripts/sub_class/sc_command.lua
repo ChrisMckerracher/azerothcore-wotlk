@@ -36,11 +36,12 @@ local function ClassChoice(event, player, msg)
             local subclass = SUBCLASSES[words[2]]
             if subclass == nil then
                 player:SendBroadcastMessage("You tried to write a fake class, idiot!")
+                return false
             end
 
             local current_subclass = SUBCLASSES[GetSubclass(player_name)]
             if current_subclass ~= nil then
-                current_subclass:DeRegister(player)
+                current_subclass:Deregister(player)
             end
             UpdateSubclass(player_name, subclass.name)
             subclass:Register(player)
