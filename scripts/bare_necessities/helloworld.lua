@@ -9,7 +9,7 @@ local function OnLogin(event, player)
         msg = "Hello from SQL! There are currently " .. count .. " characters in the DB."
     end
 
-    player:SendBroadcastMessage(msg)
+    player:SendBroadcastMessage(player:GetClassAsString())
 end
 
 RegisterPlayerEvent(3, OnLogin)
