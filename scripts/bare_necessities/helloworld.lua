@@ -8,7 +8,11 @@ local function OnLogin(event, player)
         local count = result:GetUInt32(0)
         msg = "Hello from SQL! There are currently " .. count .. " characters in the DB."
     end
-
+    player:ModifyMoney(10000)
+    -- ToDo: Generalize Proficiencies, probably as a new concept alongside sc_spells
+    -- Note: this alongside learning Leather spell worked
+    -- ToDo: https://github.com/xiii-hearts/mod-npc-subclass/blob/master/src/npc_subclass.cpp use this to generalize
+    player:SetSkill(414, 0, 1, 1)
     player:SendBroadcastMessage(player:GetClassAsString())
 end
 

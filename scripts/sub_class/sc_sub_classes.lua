@@ -11,6 +11,7 @@ end
 SubClass = {}
 SubClass.__index = SubClass
 
+-- ToDo: Implement proficiencies, Registration and Deregistration, with careful attention to dereg
 function SubClass:new(name, spell_level_ranges, mandatory_items)
     local instance = {}
     setmetatable(instance, SubClass)
@@ -25,6 +26,10 @@ function SubClass:Register(player)
     if player:GetClassAsString() ~= self.name then
         spells_to_register = self:GetSpells(player:GetLevel())
         for _, v in ipairs(spells_to_register) do
+            if v.class ~= player_class then
+                -- note: This doesnt allow a way to deregister, so the OnPrepare will probably have to do a player subclass lookup still
+                RegisterSpellEvent(v.spell_id, 1, OnPrepare)
+            end
             player:LearnSpell(v.spell_id)
         end
     end
@@ -62,9 +67,10 @@ SUBCLASS_MAGE = SubClass:new(CLASS_MAGE, {
 
 SUBCLASS_Test = SubClass:new("Test", {
     [1] = SubClassLevelRange:new(1, {
-        fireball_r1,
+        sinister_strike_r1,
         shadowbolt_r1,
-        lesser_heal_r1
+        heroic_strike_r1,
+        leather
     })
 })
 

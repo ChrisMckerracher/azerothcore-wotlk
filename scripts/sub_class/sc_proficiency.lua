@@ -1,0 +1,4 @@
+    -- ToDo: Generalize Proficiencies, probably as a new concept alongside sc_spells
+    -- Note: this alongside learning Leather spell worked
+    -- ToDo: https://github.com/xiii-hearts/mod-npc-subclass/blob/master/src/npc_subclass.cpp use this to generalize
+    --player:SetSkill(414, 0, 1, 1)

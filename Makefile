@@ -15,11 +15,12 @@ install-nobots: install
 install-modules:
 	rm -r $(BASE_FOLDER)/modules/*
 	cd $(BASE_FOLDER) && git checkout HEAD -- modules
-	# docker setup is weird, so put sql files in a weird place
-	#cp -r $(BASE_FOLDER)/modules/mod-individual-progression/data/sql/world/base/* $(BASE_FOLDER)/data/sql/custom/db_world/
 
 	# copy third party modules
 	cp -r third-party/* $(BASE_FOLDER)/modules
+	# docker setup is weird, so put sql files in a weird place
+	cp -r $(BASE_FOLDER)/modules/mod-individual-progression/data/sql/world/base/* $(BASE_FOLDER)/data/sql/custom/db_world/
+
 	@if [ "$(MY_ENV_VAR)" != "playerbots" ]; then \
 		rm -r $(BASE_FOLDER)/modules/mod-playerbots || true; \
 	fi
@@ -63,3 +64,11 @@ install-scripts:
 #the git config line gets commented out, and the cmake line loses and and
     ##git config --global --add safe.directory /azerothcore && \
     #cmake /azerothcore \
+
+.PHONY: init-data
+init-data:
+	docker cp ac-worldserver:/azerothcore/env/dist/data ./data
+	7z x ./third-party/mod-individual-progression/optional/dbc.7z -o./data/dbc -y
+	mv data default/datamount # ToDo: don't hardcode default
+	# ToDo: update docker-compose to mount this
+	# or actual todo: make your own init-data that isupdated :)

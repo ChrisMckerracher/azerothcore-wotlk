@@ -11,3 +11,8 @@ CLASS_SHAMAN  = "Shaman"
 CLASS_MAGE    = "Mage"
 CLASS_WARLOCK = "Warlock"
 CLASS_DRUID   = "Druid"
+CLASS_MISC = "Misc"
+
+
+RESOURCE_MANA = 0
+RESOURCE_RAGE = 1
