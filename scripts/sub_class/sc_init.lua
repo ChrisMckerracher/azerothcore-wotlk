@@ -1,12 +1,3 @@
-local function createRage(player)
-    -- ToDo: This allows rage generation while still allowing caster to regen mana
-    -- ToDo: This allows rage generation while still allowing energy generation
-    player:SetPowerType(RESOURCE_RAGE)
-    player:SetMaxPower(RESOURCE_RAGE, 500)
-    player:SetPower(0, RESOURCE_RAGE)
-end
-
-
 -- This function exists so I have a single spot to handle sanitization if I get around to that
 local function InitializePlayer(player_name)
     return CharDBExecute(string.format(

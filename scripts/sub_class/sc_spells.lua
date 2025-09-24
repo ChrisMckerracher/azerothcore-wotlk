@@ -9,7 +9,7 @@ function Spell:new(name, class, spell_id, energy_cost, rage_cost)
     instance.class = class
     instance.spell_id = spell_id
     instance.energy_cost = energy_cost
-    instace.rage_cost = rage_cost
+    instance.rage_cost = rage_cost
     return instance
 end
 

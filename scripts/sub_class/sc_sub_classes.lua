@@ -27,7 +27,6 @@ function SubClass:Register(player)
         spells_to_register = self:GetSpells(player:GetLevel())
         for _, v in ipairs(spells_to_register) do
             if v.class ~= player_class then
-                -- note: This doesnt allow a way to deregister, so the OnPrepare will probably have to do a player subclass lookup still
                 RegisterSpellEvent(v.spell_id, 1, OnPrepare)
             end
             player:LearnSpell(v.spell_id)
