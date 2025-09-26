@@ -15,6 +15,27 @@ end
 
 -- Proficiency
 leather = Spell:new("Wear Leather", CLASS_MISC, 9077)
+mail = Spell:new("Wear Mail", CLASS_MISC, 8737)
+plate = Spell:new("Wear Plate", CLASS_MISC, 750)
+
+shield = Spell:new("Use Shield", CLASS_MISC, 9116)
+block = Spell:new("Block", CLASS_MISC, 107) -- ToDo this is wrong, as it belongs to multiple classes
+
+fist_weapons      = Spell:new("Fist Weapons", CLASS_MISC, 15590)
+daggers           = Spell:new("Daggers", CLASS_MISC, 1180)
+one_handed_swords = Spell:new("One-Handed Swords", CLASS_MISC, 201)
+two_handed_swords = Spell:new("Two-Handed Swords", CLASS_MISC, 202)
+one_handed_axes   = Spell:new("One-Handed Axes", CLASS_MISC, 196)
+two_handed_axes   = Spell:new("Two-Handed Axes", CLASS_MISC, 197)
+one_handed_maces  = Spell:new("One-Handed Maces", CLASS_MISC, 198)
+two_handed_maces  = Spell:new("Two-Handed Maces", CLASS_MISC, 199)
+polearms          = Spell:new("Polearms", CLASS_MISC, 200)
+staves            = Spell:new("Staves", CLASS_MISC, 227)
+bows              = Spell:new("Bows", CLASS_MISC, 264)
+crossbows         = Spell:new("Crossbows", CLASS_MISC, 5011)
+guns              = Spell:new("Guns", CLASS_MISC, 266)
+thrown            = Spell:new("Thrown", CLASS_MISC, 2567)
+wands             = Spell:new("Wands", CLASS_MISC, 5009)
 
 -- Mage
 

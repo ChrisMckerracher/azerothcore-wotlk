@@ -10,3 +10,13 @@ function append(t1, t2)
 
     return new_array
 end
+
+function item_exists(t, i)
+    for k = 1, #t do
+        if t[k] == i then
+            return true
+        end
+    end
+
+    return false
+end
