@@ -1,10 +1,11 @@
 SubClassLevelRange = {}
 SubClassLevelRange.__index = SubClassLevelRange
-function SubClassLevelRange:new(level, spells)
+function SubClassLevelRange:new(level, spells, proficiencies)
     local instance = {}
     setmetatable(instance, SubClassLevelRange)
     instance.level = level
     instance.spells = spells
+    instance.proficiencies = proficiencies
     return instance
 end
 
@@ -31,6 +32,11 @@ function SubClass:Register(player)
             end
             player:LearnSpell(v.spell_id)
         end
+
+        local proficiencies = self:GetProficiencies(player:GetLevel())
+        for _, v in ipairs(proficiencies) do
+            v:Register(player)
+        end
     end
 end
 
@@ -44,6 +50,11 @@ function SubClass:Deregister(player)
             player:RemoveSpell(v.spell_id)
         end
     end
+
+    local proficiencies = self:GetProficiencies(player:GetLevel())
+    for _, v in ipairs(proficiencies) do
+        v:Deregister(player)
+    end
 end
 
 function SubClass:GetSpells(max_level)
@@ -56,12 +67,22 @@ function SubClass:GetSpells(max_level)
     return spells
 end
 
+function SubClass:GetProficiencies(max_level)
+    local proficiencies = {}
+    for _, v in ipairs(self.spell_level_ranges) do
+        if v.level <= max_level then
+            proficiencies = append(proficiencies, v.proficiencies)
+        end
+    end
+    return proficiencies
+end
+
 SUBCLASS_MAGE = SubClass:new(CLASS_MAGE, {
     SubClassLevelRange:new(1, {
         fireball_r1,
         arcane_missiles_r1,
         polymorph_r1
-    })
+    }, {})
 })
 
 SUBCLASS_TEST = SubClass:new("Test", {
@@ -69,10 +90,12 @@ SUBCLASS_TEST = SubClass:new("Test", {
         sinister_strike_r1,
         shadowbolt_r1,
         heroic_strike_r1,
-        leather
-    }),
+    }, {}),
     SubClassLevelRange:new(2, {
         fireball_r1,
+    }, {
+        leather_proficiency,
+        two_handed_sword_proficiency
     })
 })
 

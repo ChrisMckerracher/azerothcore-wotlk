@@ -1,11 +1,11 @@
 Proficiency = {}
 Proficiency.__index = Proficiency
 
-function Proficiency:new(skill, spells, ignore_classes)
+function Proficiency:new(skill, spell, ignore_classes)
     local instance = {}
     setmetatable(instance, Proficiency)
     instance.skill = skill
-    instance.spells = spells
+    instance.spell = spell
     instance.ignore_classes = ignore_classes
     return instance
 end
@@ -16,7 +16,7 @@ function Proficiency:Register(player)
     end
 
     player:SetSkill(self.skill, 0, 1, 1)
-    player:LearnSpell(spell.spell_id)
+    player:LearnSpell(self.spell.spell_id)
 end
 
 function Proficiency:Register(player)
@@ -25,9 +25,7 @@ function Proficiency:Register(player)
     end
 
     -- Weapon skills must be relearned
-    if self.skill ~= nil then
-        player:SetSkill(self.skill, 0, 1, 1)
-    end
+    player:SetSkill(self.skill, 0, 1, 1)
     player:LearnSpell(self.spell.spell_id)
 end
 
@@ -35,6 +33,7 @@ function Proficiency:Deregister(player)
     if item_exists(self.ignore_classes, player:GetClassAsString()) then
         return
     end
+    player:SetSkill(self.skill, 0, 0, 0)
     player:RemoveSpell(self.spell.spell_id)
 end
 
@@ -128,8 +127,7 @@ two_handed_mace_proficiency = Proficiency:new(160, two_handed_maces, {
     CLASS_PALADIN,
     CLASS_SHAMAN,
     CLASS_WARRIOR,
-    CLASS_DRUID,
-    CLASS_DEATHKNIGHT
+    CLASS_DRUID
 })
 
 polearm_proficiency = Proficiency:new(229, polearms, {

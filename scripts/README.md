@@ -10,3 +10,6 @@ Namespace your files, at the very least your lua files
 The installation of 'fake modules'(named as modules are an actual concept in azerothcore)
 puts all modules in shared folders. Namespacing your files with a prefix eliminates a name
 conflict issue
+
+lua files are loaded in order, so function definitions can only be read in order if the file
+naming suffices. this is garbo but whatever
