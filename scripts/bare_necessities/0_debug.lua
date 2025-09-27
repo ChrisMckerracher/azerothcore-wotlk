@@ -4,19 +4,15 @@ local COOKING_SKILL_ID = 185
 local CAMPFIRE_SPELL_ID = 818
 
 local FOOD_ITEMS = {
-    {id = 8952, name = "Roasted Quail"},
-    {id = 35953, name = "Mead Basted Caribou"},
+    {id = 117, name = "Tough Jerky"},
     {id = 2287, name = "Haunch of Meat"},
-    {id = 3771, name = "Wild Hog Shank"},
     {id = 4599, name = "Cured Ham Steak"}
 }
 
 local DRINK_ITEMS = {
-    {id = 27860, name = "Purified Draenic Water"},
-    {id = 1645, name = "Moonberry Juice"},
-    {id = 8766, name = "Morning Glory Dew"},
-    {id = 1205, name = "Melon Juice"},
-    {id = 1179, name = "Ice Cold Milk"}
+    {id = 159, name = "Refreshing Spring Water"},
+    {id = 1179, name = "Ice Cold Milk"},
+    {id = 1645, name = "Moonberry Juice"}
 }
 
 local CAMPFIRE_REAGENTS = {
@@ -25,13 +21,13 @@ local CAMPFIRE_REAGENTS = {
 }
 
 local function seedRandom()
-    if BareNecessitiesDebugSeeded then
+    if NecessityDebugSeeded then
         return
     end
 
     local seed = os.time() + math.random(1000)
     math.randomseed(seed)
-    BareNecessitiesDebugSeeded = true
+    NecessityDebugSeeded = true
 end
 
 local function pickRandomItem(pool)
