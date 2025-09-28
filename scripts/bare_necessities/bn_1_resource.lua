@@ -47,10 +47,34 @@ function Necessity:new(config)
         minimum = config.minimum or 0,
         maximum = config.maximum or config.default or 0,
         debuff_spell = config.debuff_spell,
-        scale = determine_scale(config)
+        scale = determine_scale(config),
+        notify_modulus = config.notify_modulus
     }
 
     return setmetatable(resource, self)
+end
+
+function Necessity:should_notify(value)
+    if self.notify_modulus then
+        local floored = math.floor(value + 0.5)
+        if floored < 6 then
+            return true
+        end
+
+        if floored % self.notify_modulus ~= 0 and floored ~= self.maximum and floored ~= self.minimum then
+            return false
+        end
+    end
+
+    return true
+end
+
+function Necessity:notify(player, value)
+    if not self:should_notify(value) then
+        return
+    end
+
+    player:SendBroadcastMessage(string.format(TICK_MESSAGE, self.label, format_value(value)))
 end
 
 function Necessity:to_stored(value)
@@ -87,7 +111,7 @@ function Necessity:set(player, value, suppress_message)
     end
 
     if not suppress_message then
-        player:SendBroadcastMessage(string.format(TICK_MESSAGE, self.label, format_value(clamped)))
+        self:notify(player, clamped)
     end
 
     return clamped
@@ -153,7 +177,7 @@ function Necessity:increment(player)
         WHERE ID = '%s'
     ]], self.column, stored_value, sanitized_name))
 
-    player:SendBroadcastMessage(string.format(TICK_MESSAGE, self.label, format_value(next_value)))
+    self:notify(player, next_value)
 end
 
 function Necessity:decrement(player)
@@ -179,7 +203,7 @@ function Necessity:decrement(player)
         end
     end
 
-    player:SendBroadcastMessage(string.format(TICK_MESSAGE, self.label, format_value(next_value)))
+    self:notify(player, next_value)
 end
 
 function Necessity:tick(players)
@@ -200,10 +224,6 @@ local function OnLogin(event, player)
     for _, key in ipairs(NecessityResourceOrder) do
         local resource = NecessityResources[key]
         local value = resource:fetch(player:GetName())
-
-        if key == "Rest" and value < resource.maximum then
-            value = resource:set(player, resource.maximum, true)
-        end
 
         table.insert(summaries, string.format("%s: %s", resource.label, format_value(value)))
     end

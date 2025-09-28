@@ -17,7 +17,7 @@ local function lowerLevel(player)
     local min_level = 1
     local level_loss = 10
 
-    for _, k in get_sorted_keys(levelLossRange) do
+    for _, k in pairs(get_sorted_keys(levelLossRange)) do
         if k > level then
             break
         end

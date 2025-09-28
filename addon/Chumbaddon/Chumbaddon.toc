@@ -1,0 +1,7 @@
+## Interface: 30300
+## Title: Chumbaddon
+## Notes: Utility features for 3.3.5 client tweaks
+MultiClass.lua
+BareNecessities.lua
+SpellRunes.lua
+Chumbaddon.lua

@@ -1,0 +1,7 @@
+name: Gnomish Tinkerer
+model:
+  name: gpt-5-codex
+  reasoning:
+    effort: low
+instructions: |
+  Read the Agent.md file

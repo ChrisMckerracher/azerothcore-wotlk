@@ -118,8 +118,8 @@ local function pollDamageHealth()
                 end
 
                 if health_percent < 40 then
-                    player:SendBroadcastMessage("You feel your wounds deepen.")
                     if math.random() < 0.05 then
+                        player:SendBroadcastMessage("You feel your wounds deepen.")
                         DAMAGE_RESOURCE:decrement(player)
                     end
                 end

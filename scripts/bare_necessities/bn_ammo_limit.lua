@@ -4,6 +4,9 @@ local MAX_ARROWS = 200
 local ARROW_CLASS = 6
 local ARROW_SUBCLASS = 2
 
+local CURRENT_GENERIC_SPELL = 1
+local CURRENT_AUTOREPEAT_SPELL = 3
+
 local ROOT_CONTAINER = 255
 local ROOT_SLOT_RANGES = {
   { start_slot = 0, end_slot = 18 },   -- equipped gear + ammo slot
@@ -136,24 +139,44 @@ local function consumeArrow(player)
     return false
 end
 
+local function get_casted_spell(player, spell)
+    if spell then
+        return spell
+    end
+
+    if player and player.GetCurrentSpell then
+        local current = player:GetCurrentSpell(CURRENT_AUTOREPEAT_SPELL)
+        if current then
+            return current
+        end
+
+        current = player:GetCurrentSpell(CURRENT_GENERIC_SPELL)
+        if current then
+            return current
+        end
+    end
+
+    return nil
+end
+
 local function OnSpellCast(event, player, spell, skipCheck)
-    if skipCheck then
+    local active_spell = get_casted_spell(player, spell)
+
+    if not active_spell then
         return
     end
 
-    if spell then
-        local spellId = spell:GetEntry()
-        if spellId and ARROW_EXEMPT_SPELLS[spellId] then
-            return
-        end
+    local spellId = active_spell and active_spell:GetEntry()
+    if spellId and ARROW_EXEMPT_SPELLS[spellId] then
+        return
     end
 
     if consumeArrow(player) then
         return
     end
 
-    if spell then
-        spell:Cancel()
+    if active_spell then
+        active_spell:Cancel()
     end
     player:InterruptSpell(3, false)
     player:SendBroadcastMessage("You need arrows to cast!")

@@ -9,10 +9,20 @@ local RESOURCE_REFRESH_INTERVAL_MS = RESOURCE_REFRESH_INTERVAL_SECONDS * 1000
 local RESOURCES = {
     Hunger = Necessity:new({ column = "Hunger", label = "hunger", decrement_step = 1, increment_step = 1, default = 5, minimum = 0, maximum = 5, debuff_spell = DEBUFFS.DAZED }),
     Thirst = Necessity:new({ column = "Thirst", label = "thirst", decrement_step = 1, increment_step = 1, default = 5, minimum = 0, maximum = 5, debuff_spell = DEBUFFS.DAZED }),
-    Rest = Necessity:new({ column = "Rest", label = "fatigue", decrement_step = 5, increment_step = 2, default = 50, minimum = 0, maximum = 50, debuff_spell = DEBUFFS.DAZED })
+    Rest = Necessity:new({ column = "Rest", label = "fatigue", decrement_step = 10, increment_step = 2, default = 50, minimum = 0, maximum = 50, debuff_spell = DEBUFFS.DAZED, notify_modulus = 10 })
 }
 
 local RESOURCE_ORDER = { "Hunger", "Thirst", "Rest" }
+
+local STATUS_ADDON_PREFIX = "BNSTAT"
+
+--[[
+Status Broadcast Format
+prefix: BNSTAT (addon message prefix)
+payload: "PlayerName|label=value,label=value"
+example: "Fizzlesprocket|hunger=45,thirst=32,fatigue=50,damage=48"
+Addons can consume via RegisterAddonMessagePrefix("BNSTAT") and listening to CHAT_MSG_ADDON.
+]]
 
 local function format_status_value(value)
     if math.floor(value) == value then
@@ -57,9 +67,8 @@ local function refreshResourceDebuffs()
             end
 
             if #status_parts > 0 then
-                -- Status payload format: BN_STATUS|PlayerName|label=value,label=value (consumed by external addons)
-                local message = string.format("BN_STATUS|%s|%s", player:GetName(), table.concat(status_parts, ","))
-                SendWorldMessage(message)
+                local payload = string.format("%s|%s", player:GetName(), table.concat(status_parts, ","))
+                player:SendAddonMessage(STATUS_ADDON_PREFIX, payload, 0x07, player)
             end
         end
     end
