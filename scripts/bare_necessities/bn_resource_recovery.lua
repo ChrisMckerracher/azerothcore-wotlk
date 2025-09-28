@@ -35,14 +35,6 @@ local function OnAuraApply(event, player, aura)
         end
     end
 
-    player:SendBroadcastMessage(string.format(
-        "Debug: aura apply event=%d auraId=%d name=%s type=%s",
-        event,
-        auraId,
-        auraName,
-        type(aura)
-    ))
-
     local resourceKey = AURA_RESOURCE_MAP[auraName]
     if not resourceKey then
         return
@@ -53,14 +45,10 @@ local function OnAuraApply(event, player, aura)
         return
     end
 
-    local action = RECOVERY_MESSAGES[resourceKey] or "recovering"
-    player:SendBroadcastMessage(string.format("Aura detected: %s (%d)", auraName, auraId))
-    player:SendBroadcastMessage(string.format("Aura detected: %s. %s will improve.", action, resource.label))
-
     resource:increment(player)
 
     local debuff = RECOVERY_DEBUFFS[resourceKey]
-    if debuff then
+    if debuff == DEBUFFS.RESURRECTION_SICKNESS then
         player:RemoveAura(debuff)
     end
 end

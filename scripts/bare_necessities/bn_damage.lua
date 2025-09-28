@@ -19,13 +19,38 @@ local DAMAGE_RESOURCE = Necessity:new({
     default = 5,
     minimum = 0,
     maximum = 5,
-    debuff_spell = 15007 -- Resurrection Sickness
+    debuff_spell = DEBUFFS.RESURRECTION_SICKNESS
 })
 
-if NecessityResources and not NecessityResources.Damage then
-    NecessityResources.Damage = DAMAGE_RESOURCE
+
+function DamageResourceRefresh(player)
+    local current = select(1, DAMAGE_RESOURCE:fetch(player:GetName()))
+    if current <= DAMAGE_RESOURCE.minimum then
+        if not player:HasAura(DAMAGE_RESOURCE.debuff_spell) then
+            player:AddAura(DAMAGE_RESOURCE.debuff_spell, player)
+        end
+    else
+        if player:HasAura(DAMAGE_RESOURCE.debuff_spell) then
+            player:RemoveAura(DAMAGE_RESOURCE.debuff_spell)
+        end
+    end
+end
+
+NecessityResources = NecessityResources or {}
+NecessityResources.Damage = DAMAGE_RESOURCE
+
+NecessityResourceOrder = NecessityResourceOrder or {}
+local damage_present = false
+for _, key in ipairs(NecessityResourceOrder) do
+    if key == "Damage" then
+        damage_present = true
+        break
+    end
+end
+if not damage_present then
     table.insert(NecessityResourceOrder, "Damage")
 end
+
 
 local function ensureFirstAidLoadout(player)
     player:SetSkill(FIRST_AID_SKILL_ID, 0, FIRST_AID_MAX_SKILL, FIRST_AID_MAX_SKILL)
@@ -66,7 +91,7 @@ local function OnDamageAura(event, player, aura)
 
     player:SendBroadcastMessage("Bandaging reduces your damage level.")
     DAMAGE_RESOURCE:increment(player)
-    player:RemoveAura(15007)
+    player:RemoveAura(DEBUFFS.RESURRECTION_SICKNESS)
 end
 
 RegisterPlayerEvent(64, OnDamageAura)
@@ -84,9 +109,19 @@ local function pollDamageHealth()
             local previous = DAMAGE_HEALTH_TRACK[guid]
 
             if previous and current < previous then
-                player:SendBroadcastMessage("You feel your wounds deepen.")
-                if math.random() < 0.5 then
-                    DAMAGE_RESOURCE:decrement(player)
+                local health_percent
+
+                if player.GetHealthPct then
+                    health_percent = player:GetHealthPct()
+                else
+                    health_percent = (current / player:GetMaxHealth()) * 100
+                end
+
+                if health_percent < 40 then
+                    player:SendBroadcastMessage("You feel your wounds deepen.")
+                    if math.random() < 0.05 then
+                        DAMAGE_RESOURCE:decrement(player)
+                    end
                 end
             end
 

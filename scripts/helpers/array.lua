@@ -20,3 +20,12 @@ function item_exists(t, i)
 
     return false
 end
+
+function get_sorted_keys(t)
+    local keys = {}
+    for k in pairs(t) do
+        keys[#keys+1] = k
+    end
+    table.sort(keys)
+    return keys
+end
