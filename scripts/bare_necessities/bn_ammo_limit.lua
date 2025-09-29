@@ -4,6 +4,9 @@ local MAX_ARROWS = 200
 local ARROW_CLASS = 6
 local ARROW_SUBCLASS = 2
 
+local SPELL_ATTR0_USES_RANGED_SLOT = 0x00000002 -- SharedDefines.h:395
+local SPELL_ATTR0_IS_TRADESKILL   = 0x00000020 -- SharedDefines.h:399
+
 local CURRENT_GENERIC_SPELL = 1
 local CURRENT_AUTOREPEAT_SPELL = 3
 
@@ -159,6 +162,34 @@ local function get_casted_spell(player, spell)
     return nil
 end
 
+local function should_consume_arrows(player, spell)
+    if not player or not spell then
+        return false
+    end
+
+    if spell.GetSpellInfo then
+        local info = spell:GetSpellInfo()
+        if info then
+            if info.HasAttribute and info:HasAttribute(0, SPELL_ATTR0_IS_TRADESKILL) then
+                return false
+            end
+
+            if info.HasAttribute and info:HasAttribute(0, SPELL_ATTR0_USES_RANGED_SLOT) then
+                return true
+            end
+        end
+    end
+
+    if spell.GetCastTime then
+        local cast_time = spell:GetCastTime()
+        if cast_time and cast_time > 0 then
+            return true
+        end
+    end
+
+    return false
+end
+
 local function OnSpellCast(event, player, spell, skipCheck)
     local active_spell = get_casted_spell(player, spell)
 
@@ -171,11 +202,26 @@ local function OnSpellCast(event, player, spell, skipCheck)
         return
     end
 
+    if spellId == 6477 then
+        return
+    end
+
+    if not should_consume_arrows(player, active_spell) then
+        return
+    end
+
     if consumeArrow(player) then
         return
     end
 
     if active_spell then
+        local name
+        if active_spell.GetSpellInfo then
+            local info = active_spell:GetSpellInfo()
+            if info and info.GetName then
+                name = info:GetName()
+            end
+        end
         active_spell:Cancel()
     end
     player:InterruptSpell(3, false)
