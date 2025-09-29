@@ -101,7 +101,16 @@ local function runTick()
 
     for _, key in ipairs(RESOURCE_ORDER) do
         local resource = RESOURCES[key]
-        resource:tick(players)
+        local filtered = {}
+        for _, player in pairs(players) do
+            if player and player:IsAlive() then
+                table.insert(filtered, player)
+            end
+        end
+
+        if #filtered > 0 then
+            resource:tick(filtered)
+        end
     end
 end
 

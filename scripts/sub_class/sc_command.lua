@@ -1,4 +1,7 @@
 local function ClassChoice(event, player, msg)
+    if player == nil then
+        return
+    end
     local player_name = player:GetName()
     local words = split_words(msg)
     if words[1] == SUBCLASS_COMMAND then

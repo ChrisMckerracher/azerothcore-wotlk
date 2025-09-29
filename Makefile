@@ -4,8 +4,8 @@ install: install-modules install-scripts
 	# clean the modules folder
 	cd $(BASE_FOLDER) && git checkout HEAD -- data
 	# run
-	#docker compose -f $(BASE_FOLDER)/docker-compose.yml build --no-cache && docker compose -f $(BASE_FOLDER)/docker-compose.yml  up
-	docker compose -f $(BASE_FOLDER)/docker-compose.yml up
+	docker compose -f $(BASE_FOLDER)/docker-compose.yml build --no-cache && docker compose -f $(BASE_FOLDER)/docker-compose.yml  up
+	#docker compose -f $(BASE_FOLDER)/docker-compose.yml up
 
 .PHONY: install-nobots
 install-nobots: BASE_FOLDER=default
