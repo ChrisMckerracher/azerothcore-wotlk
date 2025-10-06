@@ -48,7 +48,7 @@ local function onDungeonDeath(_, player)
     lowerLevel(player, dungeon_loss_range)
 end
 
-local function onOutdoorDeath(_, _, player)
+local function onOutdoorDeathInternal(player)
     local map = player:GetMap()
     if map ~= nil and (map:IsDungeon() or map:IsBattleground() or map:IsRaid()) then
         return
@@ -60,6 +60,12 @@ local function onOutdoorDeath(_, _, player)
     end
     player:TeleportTo("Orgrimmar")
     lowerLevel(player, level_loss_range)
+end
+
+local function onOutdoorDeath(_, _, player)
+    CreateLuaEvent(function()
+        onOutdoorDeathInternal(player)
+    end, 50, 1)
 end
 
 RegisterPlayerEvent(8, onOutdoorDeath)

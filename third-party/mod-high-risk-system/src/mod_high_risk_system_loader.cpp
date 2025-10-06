@@ -4,6 +4,8 @@
 *   It has multiple Bugfixes, Performance and Efficiency Updates! ~ Lushen
 */
 
+#include "mod_high_risk_system_loader.h"
+
 void AddSC_high_risk_system();
 
 void Addmod_high_risk_systemScripts()
