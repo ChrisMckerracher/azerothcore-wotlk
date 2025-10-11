@@ -4,8 +4,8 @@ install: install-modules install-scripts
 	# clean the modules folder
 	cd $(BASE_FOLDER) && git checkout HEAD -- data
 	# run
-	docker compose -f $(BASE_FOLDER)/docker-compose.yml build --no-cache && docker compose -f $(BASE_FOLDER)/docker-compose.yml  up
-	#docker compose -f $(BASE_FOLDER)/docker-compose.yml up
+	#docker compose -f $(BASE_FOLDER)/docker-compose.yml build --no-cache && docker compose -f $(BASE_FOLDER)/docker-compose.yml  up
+	docker compose -f $(BASE_FOLDER)/docker-compose.yml up
 
 .PHONY: install-nobots
 install-nobots: BASE_FOLDER=default
@@ -21,14 +21,11 @@ install-modules:
 	# docker setup is weird, so put sql files in a weird place
 	cp -r $(BASE_FOLDER)/modules/mod-individual-progression/data/sql/world/base/* $(BASE_FOLDER)/data/sql/custom/db_world/
 
-	@if [ "$(MY_ENV_VAR)" != "playerbots" ]; then \
-		rm -r $(BASE_FOLDER)/modules/mod-playerbots || true; \
+	@if [ "$(BASE_FOLDER)" != "playerbots" ]; then \
+		echo "removing $(BASE_FOLDER)/modules/mod-playerbots"; \
+		rm -rf $(BASE_FOLDER)/modules/mod-playerbots; \
 	fi
 
-	# but gate our rules about handling playerbots sql files
-	# ToDo: I will need to wrap the appropriate Dockerfile to run a custom install script before calling the worldserver executable
-	# ToDo: I may be able to base it on: https://github.com/coc0nut/AzerothCore-with-Playerbots-Docker-Setup/blob/main/setup.sh
-	cp -r third-party/* $(BASE_FOLDER)/modules
 	@if [ "$(MY_ENV_VAR)" = "playerbots" ]; then \
 		cp -r $(BASE_FOLDER)/modules/mod-playerbots/data/sql/characters/base/* $(BASE_FOLDER)/data/sql/custom/db_characters; \
 		cp -r $(BASE_FOLDER)/modules/mod-playerbots/data/sql/world/base/* $(BASE_FOLDER)/data/sql/custom/db_world; \

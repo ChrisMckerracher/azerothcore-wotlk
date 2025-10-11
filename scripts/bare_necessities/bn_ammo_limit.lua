@@ -7,6 +7,14 @@ local ARROW_SUBCLASS = 2
 local SPELL_ATTR0_USES_RANGED_SLOT = 0x00000002 -- SharedDefines.h:395
 local SPELL_ATTR0_IS_TRADESKILL   = 0x00000020 -- SharedDefines.h:399
 
+local SPELL_EFFECT_OPEN_LOCK = 33 -- SharedDefines.h:822
+
+local TYPEID_ITEM = 1
+local TYPEID_CONTAINER = 2
+local TYPEID_UNIT = 3
+local TYPEID_PLAYER = 4
+local TYPEID_GAMEOBJECT = 5
+
 local CURRENT_GENERIC_SPELL = 1
 local CURRENT_AUTOREPEAT_SPELL = 3
 
@@ -175,7 +183,21 @@ local function should_consume_arrows(player, spell)
             end
 
             if info.HasAttribute and info:HasAttribute(0, SPELL_ATTR0_USES_RANGED_SLOT) then
-                return true
+                return false
+            end
+
+            if info.HasEffect and info:HasEffect(SPELL_EFFECT_OPEN_LOCK) then
+                return false
+            end
+        end
+    end
+
+    if spell.GetTarget then
+        local target = spell:GetTarget()
+        if target and target.GetTypeId then
+            local targetType = target:GetTypeId()
+            if targetType == TYPEID_GAMEOBJECT or targetType == TYPEID_ITEM or targetType == TYPEID_CONTAINER then
+                return false
             end
         end
     end

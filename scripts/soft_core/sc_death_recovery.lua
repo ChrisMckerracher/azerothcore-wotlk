@@ -63,9 +63,7 @@ local function onOutdoorDeathInternal(player)
 end
 
 local function onOutdoorDeath(_, _, player)
-    CreateLuaEvent(function()
-        onOutdoorDeathInternal(player)
-    end, 50, 1)
+    onOutdoorDeathInternal(player)
 end
 
 RegisterPlayerEvent(8, onOutdoorDeath)
